@@ -143,6 +143,7 @@ class WebmotorsSedanScrapper():
 
     Attributes:
     - user_agent (UserAgent): An instance of the UserAgent class for generating random user agents.
+    - total_pages (int): The number of pages to retrieve.
 
     Methods:
     - _fetch_cars(page, display_per_page): Fetches sedan cars from the Webmotors API for a specific\
@@ -163,8 +164,9 @@ class WebmotorsSedanScrapper():
     ```
     """
 
-    def __init__(self) -> None:
+    def __init__(self, total_pages: int = 1) -> None:
         self.user_agent = UserAgent()
+        self.total_pages = total_pages
 
     def _fetch_cars(
             self,
@@ -210,7 +212,7 @@ class WebmotorsSedanScrapper():
         # print(json['SearchResults'])
         return json['SearchResults']
 
-    def _get_all_search_results(self, total_pages: int = 2) -> list[dict]:
+    def _get_all_search_results(self) -> list[dict]:
         """
         Fetches results from multiple pages and returns a list of all cars.
 
@@ -222,7 +224,7 @@ class WebmotorsSedanScrapper():
         """
         all_results = []
 
-        for page in range(1, total_pages + 1):
+        for page in range(1, self.total_pages + 1):
             search_results = self._fetch_cars(page=page)
             all_results.extend(search_results)
 
@@ -235,7 +237,7 @@ class WebmotorsSedanScrapper():
         Returns:
         - list[dict]: A list containing dictionaries with car listing data.
         """
-        search_results = self._get_all_search_results(total_pages=2)  # Fetch results from 2 pages
+        search_results = self._get_all_search_results()
 
         cars_list = []
 
@@ -272,9 +274,9 @@ class WebmotorsSedanScrapper():
             car.seller_troca_com_troco = result['Seller']['TrocaComTroco']
 
             cars_list.append(car.to_dict())
-            print(cars_list)
+            # print(cars_list)
 
-        print(len(cars_list))
+        # print(len(cars_list))
         return cars_list
 
     def save_results_to_csv(self, filename='webmotors_results.csv') -> None:
@@ -303,8 +305,8 @@ class WebmotorsSedanScrapper():
         return dataframe
 
 
-WebmotorsSedanScrapper().save_results_to_csv()
-result = WebmotorsSedanScrapper().create_dataframe_from_search_results()
+WebmotorsSedanScrapper(total_pages=2).save_results_to_csv()
+result = WebmotorsSedanScrapper(total_pages=2).create_dataframe_from_search_results()
 
 print(result)
 print(result.info())
