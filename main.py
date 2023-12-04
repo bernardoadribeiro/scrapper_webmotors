@@ -1,3 +1,5 @@
+import random
+import time
 import requests
 from fake_useragent import UserAgent
 import pandas as pd
@@ -227,6 +229,9 @@ class WebmotorsSedanScrapper():
         for page in range(1, self.total_pages + 1):
             search_results = self._fetch_cars(page=page)
             all_results.extend(search_results)
+
+            # Interval between requests to prevent patterns
+            time.sleep(random.uniform(1, 5))
 
         return all_results
 
