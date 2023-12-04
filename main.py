@@ -259,8 +259,8 @@ class WebmotorsSedanScrapper():
             car.color = result['Specification']['Color']['Primary']
             car.price = result['Prices']['Price']
             car.listing_type = result['ListingType']
-            car.long_comment = result['LongComment']
-            car.fipe_percent = result['FipePercent']
+            car.long_comment = result.get('LongComment', None)
+            car.fipe_percent = result.get('FipePercent', None)
             car.is_elegible_vehicle_ispection = result['IsElegibleVehicleInspection']
             car.is_elegible_360view = result['IsElegible360View']
             car.seller_id = result['Seller']['Id']
