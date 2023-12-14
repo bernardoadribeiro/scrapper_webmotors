@@ -96,6 +96,7 @@ class WebmotorsSedanScrapper():
         all_results = []
 
         for page in range(1, self.total_pages + 1):
+            print(f'Page: {page}')
             search_results = self._fetch_cars(page=page)
             all_results.extend(search_results)
 
